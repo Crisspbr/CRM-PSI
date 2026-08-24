@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { CalendarDays, Users, UserRoundPlus, ClipboardCheck, Trash2, RotateCcw, Target, ArrowUpRight, ArrowDownRight, TrendingUp, TrendingDown, DollarSign, Handshake, HeartPulse, BarChart3 } from "lucide-react"
+import { CalendarDays, Users, UserRoundPlus, ClipboardCheck, Trash2, RotateCcw, Target, ArrowUpRight, ArrowDownRight, TrendingUp, TrendingDown, DollarSign, Handshake, HeartPulse, BarChart3, Bell } from "lucide-react"
 import { useState, useEffect } from "react"
 
 import { PageTitle, Status, Empty } from "@/components/crm/clinical-ui"
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 
 import {
   ChartContainer,
@@ -69,6 +70,7 @@ export default function DashboardPage() {
   const [channelData, setChannelData] = useState<any[]>([])
   const [weeklyAppointments, setWeeklyAppointments] = useState<any[]>([])
   const [recentPatients, setRecentPatients] = useState<any[]>([])
+  const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([])
   const [mounted, setMounted] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -90,6 +92,8 @@ export default function DashboardPage() {
             setChannelData(data.channelData || [])
             setWeeklyAppointments(data.weeklyAppointments || [])
             setRecentPatients(data.recentPatients || [])
+            // Set upcoming appointments from the dashboard data (next 5 appointments)
+            setUpcomingAppointments(data.nextAppointments || [])
             setError(null)
           }
         } else {
@@ -101,6 +105,26 @@ export default function DashboardPage() {
       }
     }
     fetchDashboardData()
+    
+    // Automatically clean past sessions when dashboard loads
+    const cleanPastSessions = async () => {
+      try {
+        const res = await fetch("/api/agenda/clean-past", {
+          method: "POST",
+          credentials: "include"
+        })
+        if (!res.ok) {
+          console.error("Erro ao limpar sessões passadas")
+        } else {
+          // Optionally reload or update state if needed
+          // window.location.reload() // Uncomment if full reload is desired
+        }
+      } catch (error) {
+        console.error("Erro ao limpar sessões passadas:", error)
+      }
+    }
+    
+    cleanPastSessions()
   }, [])
 
   // Show loading state or error
@@ -133,23 +157,46 @@ export default function DashboardPage() {
     <main className="flex flex-1 flex-col gap-6 p-4 md:p-6">
       {/* Header with user greeting and clean past button */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-        <PageTitle
-          title={`Olá, ${user.name?.split(" ")[0]}`}
-          description="Confira as métricas da sua clínica hoje."
-        />
-        <form onSubmit={(e) => {
-        e.preventDefault();
-        handleCleanPast();
-      }}>
-          <Button
-            type="submit"
-            variant="default"
-            className="btn-urgent px-6 py-3 flex items-center gap-2 text-sm font-medium"
-          >
-            <RotateCcw className="h-5 w-5" />
-            Limpar sessões passadas
-          </Button>
-        </form>
+        <div className="flex items-center gap-4">
+          <PageTitle
+            title={`Olá, ${user.name?.split(" ")[0]}`}
+            description="Confira as métricas da sua clínica hoje."
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger className="p-1 rounded-hover bg-muted hover:bg-muted/50">
+              <Bell className="h-5 w-5 text-muted-foreground hover:text-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 p-2">
+                          {upcomingAppointments
+                            .filter(appt => {
+                              const apptTime = new Date(appt.startsAt);
+                              const now = new Date();
+                              const diffMs = apptTime - now;
+                              return diffMs >= 0 && diffMs <= 60 * 60 * 1000;
+                            })
+                            .map((appt) => {
+                              const apptTime = new Date(appt.startsAt);
+                              const timeString = apptTime.toLocaleTimeString('pt-BR', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                timeZone: 'America/Sao_Paulo',
+                              });
+                              return (
+                                <DropdownMenuItem key={appt.id} className="flex items-center gap-3 text-sm">
+                                  <div className="flex-shrink-0">
+                                    <CalendarDays className="h-4 w-4" />
+                                  </div>
+                                  <div>
+                                    <p className="font-medium text-white">{timeString}</p>
+                                    <p className="text-white">{appt.patientName} - {appt.title}</p>
+                                  </div>
+                                </DropdownMenuItem>
+                              );
+                            })}
+                        </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        
       </div>
 
       {/* KPI Cards Row */}
@@ -252,7 +299,7 @@ export default function DashboardPage() {
           {/* Revenue Chart */}
           <Card className="flex flex-col">
             <CardHeader>
-              <CardTitle>Receita vs. Meta</CardTitle>
+              <CardTitle className="font-semibold text-muted-foreground">Receita vs. Meta</CardTitle>
               <CardDescription>Faturamento mensal em milhares de reais (R$)</CardDescription>
             </CardHeader>
             <CardContent className="flex-1">
@@ -274,20 +321,20 @@ export default function DashboardPage() {
                   </defs>
                   <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis
-                    dataKey="month"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-                  />
-                  <YAxis
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    width={50}
-                    tickFormatter={(v) => `${v}k`}
-                    tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-                  />
+                                      dataKey="month"
+                                      tickLine={false}
+                                      axisLine={false}
+                                      tickMargin={8}
+                                      tick={{ fontSize: 12, fill: "#fff" }}
+                                    />
+                                    <YAxis
+                                      tickLine={false}
+                                      axisLine={false}
+                                      tickMargin={8}
+                                      width={50}
+                                      tickFormatter={(v) => `${v}k`}
+                                      tick={{ fontSize: 12, fill: "#fff" }}
+                                    />
                   <ChartTooltip
                     cursor={false}
                     content={<CustomTooltip />}
@@ -326,7 +373,7 @@ export default function DashboardPage() {
             {/* Pipeline Chart */}
             <Card className="flex flex-col">
               <CardHeader>
-                <CardTitle>Pipeline de Pacientes</CardTitle>
+                <CardTitle className="font-semibold text-muted-foreground">Pipeline de Pacientes</CardTitle>
                 <CardDescription>Valor em aberto por etapa do funil</CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
@@ -345,7 +392,7 @@ export default function DashboardPage() {
                       axisLine={false}
                       tickMargin={8}
                       width={95}
-                      tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+                      tick={{ fontSize: 12, fill: "#fff" }}
                     />
                     <ChartTooltip
                                           cursor={false}
@@ -380,7 +427,7 @@ export default function DashboardPage() {
             {/* Weekly Appointments */}
             <Card className="flex flex-col">
               <CardHeader>
-                <CardTitle>Agendamentos da Semana</CardTitle>
+                <CardTitle className="font-semibold text-muted-foreground">Agendamentos da Semana</CardTitle>
                 <CardDescription>Visão semanal de sessões</CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
@@ -388,19 +435,19 @@ export default function DashboardPage() {
                   <BarChart data={weeklyAppointments} margin={{ left: 8, right: 8, top: 4 }}>
                     <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis
-                      dataKey="day"
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={8}
-                      tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-                    />
-                    <YAxis
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={8}
-                      width={40}
-                      tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
-                    />
+                                        dataKey="day"
+                                        tickLine={false}
+                                        axisLine={false}
+                                        tickMargin={8}
+                                        tick={{ fontSize: 12, fill: "#fff" }}
+                                      />
+                                      <YAxis
+                                        tickLine={false}
+                                        axisLine={false}
+                                        tickMargin={8}
+                                        width={40}
+                                        tick={{ fontSize: 12, fill: "#fff" }}
+                                      />
                     <ChartTooltip cursor={false} content={<CustomTooltip />} />
                     <ChartLegend content={<ChartLegendContent />} />
                     <Bar dataKey="agendadas" fill="hsl(40, 70%, 55%)" radius={[4, 4, 0, 0]} barSize={16} />
@@ -674,28 +721,5 @@ const chartConfigPipeline = {
 const chartConfigWeekly = {
   agendadas: { label: "Agendadas", color: "hsl(40, 70%, 55%)" },
   realizadas: { label: "Realizadas", color: "hsl(160, 60%, 45%)" },
-  canceladas: { label: "Canceladas", color: "hsl(0, 70%, 50%)" },
+  canceladas: { label: "Canceladas", color: "hsl(0, 70%, 50%)" }
 } satisfies ChartConfig
-
-// Handle cleaning past sessions
-const handleCleanPast = async (e: React.FormEvent<HTMLFormElement>) => {
-  if (!window.confirm("Tem certeza que deseja remover todas as sessões passadas?")) {
-    e.preventDefault()
-    return
-  }
-  try {
-    const res = await fetch("/api/agenda/clean-past", {
-      method: "POST",
-      credentials: "include"
-    })
-    if (!res.ok) {
-      alert("Erro ao limpar sessões passadas")
-      e.preventDefault()
-    } else {
-      window.location.reload()
-    }
-  } catch (error) {
-    alert("Erro ao limpar sessões passadas")
-    e.preventDefault()
-  }
-}
