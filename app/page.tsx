@@ -647,20 +647,20 @@ export default function DashboardPage() {
             <CardContent>
               <div className="grid gap-3 sm:grid-cols-2">
                 <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" asChild>
-                  <Link href="/pacientes/novo">
+                  <Link href="/pacientes">
                     <div className="flex items-center gap-2">
                       <div className="rounded-lg bg-primary/10 p-2 text-primary">
                         <UserRoundPlus className="h-5 w-5" />
                       </div>
                       <div>
                         <p className="font-medium">Novo Paciente</p>
-                        <p className="text-xs text-muted-foreground">Cadastrar novo atendimento</p>
+                        <p className="text-xs text-muted-foreground">Cadastrar novo paciente</p>
                       </div>
                     </div>
                   </Link>
                 </Button>
                 <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" asChild>
-                  <Link href="/agenda/novo">
+                  <Link href="/agenda">
                     <div className="flex items-center gap-2">
                       <div className="rounded-lg bg-[oklch(0.65_0.15_160)/10] p-2 text-[oklch(0.65_0.15_160)]">
                         <CalendarDays className="h-5 w-5" />

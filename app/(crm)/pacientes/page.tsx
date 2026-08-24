@@ -63,7 +63,7 @@ export default function PatientsPage() {
 
   return (
     <main className="space-y-6 p-4 md:p-6">
-      <PageTitle title="Pacientes" description="Cadastros e acesso seguro ao prontuário clínico." action={<AddButton>Novo paciente</AddButton>} />
+      <PageTitle title="Pacientes" description="Cadastros e acesso seguro ao prontuário clínico." action={<AddButton>Cadastrar novo paciente</AddButton>} />
       <form action="/api/patients" method="POST" className="grid gap-3 rounded-xl border bg-card p-4 md:grid-cols-4">
         <Input required name="name" placeholder="Nome completo" />
         <Input name="phone" placeholder="WhatsApp" />
