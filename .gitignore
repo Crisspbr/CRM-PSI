@@ -29,3 +29,7 @@ tsconfig.tsbuildinfo
 *.bak
 *.tmp
 *.temp
+# Ignore Hermes agent skill directories (local, not needed in repo)
+.agents/**/
+.claude/**/
+.codex/**/
