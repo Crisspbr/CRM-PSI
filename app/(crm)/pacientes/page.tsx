@@ -6,6 +6,14 @@ import { AddButton, Empty, PageTitle, Status } from "@/components/crm/clinical-u
 import { Input } from "@/components/ui/input"
 import { Trash2 } from "lucide-react"
 
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
+import { Bell, CalendarDays } from "lucide-react"
+
 export default function PatientsPage() {
   const [user, setUser] = useState<any>(null)
   const [patients, setPatients] = useState<any[]>([])
@@ -28,6 +36,45 @@ export default function PatientsPage() {
       }
     }
     fetchData()
+  }, [])
+
+  // Fetch upcoming appointments for the bell notification (next 60 minutes)
+  const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([])
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    // Fetch real dashboard data from API
+    const fetchDashboardData = async () => {
+      try {
+        const res = await fetch("/api/dashboard")
+        if (res.ok) {
+          const data = await res.json()
+          // Set upcoming appointments from the dashboard data (next 5 appointments)
+          setUpcomingAppointments(data.nextAppointments || [])
+        }
+      } catch (err) {
+        console.error("API not available:", err)
+      }
+    }
+    fetchDashboardData()
+
+    // Automatically clean past sessions when page loads
+    const cleanPastSessions = async () => {
+      try {
+        const res = await fetch("/api/agenda/clean-past", {
+          method: "POST",
+          credentials: "include"
+        })
+        if (!res.ok) {
+          console.error("Erro ao limpar sessões passadas")
+        }
+      } catch (error) {
+        console.error("Erro ao limpar sessões passadas:", error)
+      }
+    }
+
+    cleanPastSessions()
   }, [])
 
   const handleDelete = async (id: number) => {
@@ -63,7 +110,7 @@ export default function PatientsPage() {
 
   return (
     <main className="space-y-6 p-4 md:p-6">
-      <PageTitle title="Pacientes" description="Cadastros e acesso seguro ao prontuário clínico." action={<AddButton>Cadastrar novo paciente</AddButton>} />
+      <PageTitle title="Pacientes" description="Cadastros e acesso seguro ao prontuário clínico." action={<AddButton>Cadastrar novo paciente</AddButton>} upcomingAppointments={upcomingAppointments} />
       <form action="/api/patients" method="POST" className="grid gap-3 rounded-xl border bg-card p-4 md:grid-cols-4">
         <Input required name="name" placeholder="Nome completo" />
         <Input name="phone" placeholder="WhatsApp" />

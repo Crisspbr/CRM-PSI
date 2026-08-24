@@ -646,7 +646,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-3 sm:grid-cols-2">
-                <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" asChild>
+                <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" render={
                   <Link href="/pacientes">
                     <div className="flex items-center gap-2">
                       <div className="rounded-lg bg-primary/10 p-2 text-primary">
@@ -658,8 +658,8 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </Link>
-                </Button>
-                <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" asChild>
+                } />
+                <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" render={
                   <Link href="/agenda">
                     <div className="flex items-center gap-2">
                       <div className="rounded-lg bg-[oklch(0.65_0.15_160)/10] p-2 text-[oklch(0.65_0.15_160)]">
@@ -671,8 +671,8 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </Link>
-                </Button>
-                <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" asChild>
+                } />
+                <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" render={
                   <Link href="/leads">
                     <div className="flex items-center gap-2">
                       <div className="rounded-lg bg-[oklch(0.55_0.12_200)/10] p-2 text-[oklch(0.55_0.12_200)]">
@@ -684,8 +684,8 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </Link>
-                </Button>
-                <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" asChild>
+                } />
+                <Button variant="outline" className="h-auto py-4 flex-col items-start gap-2 text-left" render={
                   <Link href="/relatorios">
                     <div className="flex items-center gap-2">
                       <div className="rounded-lg bg-[oklch(0.72_0.18_85)/10] p-2 text-[oklch(0.72_0.18_85)]">
@@ -697,7 +697,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </Link>
-                </Button>
+                } />
               </div>
             </CardContent>
           </Card>

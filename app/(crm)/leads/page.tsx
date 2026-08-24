@@ -9,10 +9,57 @@ import { AddButton, Empty, PageTitle, Status } from "@/components/crm/clinical-u
 import { Input } from "@/components/ui/input"
 import { useState, useEffect } from "react"
 
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
+import { Bell, CalendarDays } from "lucide-react"
+
 export default function LeadsPage() { 
   const [user, setUser] = useState<{id: string} | null>(null)
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+
+  // Fetch upcoming appointments for the bell notification (next 60 minutes)
+  const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([])
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    // Fetch real dashboard data from API
+    const fetchDashboardData = async () => {
+      try {
+        const res = await fetch("/api/dashboard")
+        if (res.ok) {
+          const data = await res.json()
+          // Set upcoming appointments from the dashboard data (next 5 appointments)
+          setUpcomingAppointments(data.nextAppointments || [])
+        }
+      } catch (err) {
+        console.error("API not available:", err)
+      }
+    }
+    fetchDashboardData()
+
+    // Automatically clean past sessions when page loads
+    const cleanPastSessions = async () => {
+      try {
+        const res = await fetch("/api/agenda/clean-past", {
+          method: "POST",
+          credentials: "include"
+        })
+        if (!res.ok) {
+          console.error("Erro ao limpar sessões passadas")
+        }
+      } catch (error) {
+        console.error("Erro ao limpar sessões passadas:", error)
+      }
+    }
+
+    cleanPastSessions()
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +79,7 @@ export default function LeadsPage() {
   }
 
   return <main className="space-y-6 p-4 md:p-6">
-    <PageTitle title="Leads" description="Acompanhe novos contatos até a conversão em paciente." action={<AddButton formId="leads-form">Novo lead</AddButton>}/>
+    <PageTitle title="Leads" description="Acompanhe novos contatos até a conversão em paciente." action={<AddButton formId="leads-form">Novo lead</AddButton>} upcomingAppointments={upcomingAppointments} />
     <form id="leads-form" action={createLead} className="grid gap-3 rounded-xl border bg-card p-4 md:grid-cols-4">
       <input type="hidden" name="returnTo" value="/leads"/>
       <Input required name="name" placeholder="Nome completo"/>

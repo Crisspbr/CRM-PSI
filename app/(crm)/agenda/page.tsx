@@ -5,11 +5,58 @@ import { AddButton, Empty, PageTitle } from "@/components/crm/clinical-ui"
 import { Input } from "@/components/ui/input"
 import { Trash2, AlertTriangle, RotateCcw } from "lucide-react"
 
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
+import { Bell, CalendarDays } from "lucide-react"
+
 export default function AgendaPage() { 
   const [items, setItems] = useState<any[]>([])
   const [people, setPeople] = useState<any[]>([])
   const [names, setNames] = useState<Map<number, string>>(new Map())
   const [loading, setLoading] = useState(true)
+
+  // Fetch upcoming appointments for the bell notification (next 60 minutes)
+  const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([])
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    // Fetch real dashboard data from API
+    const fetchDashboardData = async () => {
+      try {
+        const res = await fetch("/api/dashboard")
+        if (res.ok) {
+          const data = await res.json()
+          // Set upcoming appointments from the dashboard data (next 5 appointments)
+          setUpcomingAppointments(data.nextAppointments || [])
+        }
+      } catch (err) {
+        console.error("API not available:", err)
+      }
+    }
+    fetchDashboardData()
+
+    // Automatically clean past sessions when page loads
+    const cleanPastSessions = async () => {
+      try {
+        const res = await fetch("/api/agenda/clean-past", {
+          method: "POST",
+          credentials: "include"
+        })
+        if (!res.ok) {
+          console.error("Erro ao limpar sessões passadas")
+        }
+      } catch (error) {
+        console.error("Erro ao limpar sessões passadas:", error)
+      }
+    }
+
+    cleanPastSessions()
+  }, [])
 
   // Fetch initial data
   useEffect(() => {
