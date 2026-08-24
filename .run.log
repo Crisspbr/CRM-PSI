@@ -1,0 +1,208 @@
+[WARN] The "pnpm" field in package.json is no longer read by pnpm. The following keys were ignored: "pnpm.overrides". See https://pnpm.io/settings for the new home of each setting.
+$ next dev
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.4:3000
+- Environments: .env.local
+✓ Ready in 2.3s
+✓ Running next.config.mjs took 74ms
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+
+✓ Generated AGENTS.md and CLAUDE.md for AI agents. Set `agentRules: false` in next.config to disable.
+○ Compiling /login ...
+ HEAD /login 200 in 11.8s (next.js: 10.9s, application-code: 914ms)
+ GET /login 200 in 690ms (next.js: 333ms, application-code: 357ms)
+○ Compiling /api/auth/[...all] ...
+2026-08-21T14:58:15.916Z ERROR [Better Auth]: Error Error: Failed query: select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1
+params: rennannan84@gmail.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1',
+  params: [ 'rennannan84@gmail.com' ],
+  [cause]: error: autentica��o do tipo senha falhou para o usu�rio "postgres"
+      at ignore-listed frames {
+    length: 113,
+    severity: 'FATAL',
+    code: '28P01',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'auth.c',
+    line: '320',
+    routine: 'auth_failed'
+  }
+}
+# SERVER_ERROR:  Error: Failed query: select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1
+params: rennannan84@gmail.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1',
+  params: [ 'rennannan84@gmail.com' ],
+  [cause]: error: autentica��o do tipo senha falhou para o usu�rio "postgres"
+      at ignore-listed frames {
+    length: 113,
+    severity: 'FATAL',
+    code: '28P01',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'auth.c',
+    line: '320',
+    routine: 'auth_failed'
+  }
+}
+ POST /api/auth/sign-in/email 500 in 10.2s (next.js: 7.4s, application-code: 2.8s)
+ GET /cadastro 200 in 3.7s (next.js: 3.3s, application-code: 390ms)
+ GET /cadastro 200 in 168ms (next.js: 48ms, application-code: 120ms)
+2026-08-21T14:59:09.273Z ERROR [Better Auth]: Error Error: Failed query: select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1
+params: rennannan84@gmail.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1',
+  params: [ 'rennannan84@gmail.com' ],
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+# SERVER_ERROR:  Error: Failed query: select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1
+params: rennannan84@gmail.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1',
+  params: [ 'rennannan84@gmail.com' ],
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+ POST /api/auth/sign-up/email 500 in 432ms (next.js: 106ms, application-code: 326ms)
+2026-08-21T14:59:11.648Z ERROR [Better Auth]: Error Error: Failed query: select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1
+params: rennannan84@gmail.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1',
+  params: [ 'rennannan84@gmail.com' ],
+  [cause]: error: autentica��o do tipo senha falhou para o usu�rio "postgres"
+      at ignore-listed frames {
+    length: 113,
+    severity: 'FATAL',
+    code: '28P01',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'auth.c',
+    line: '320',
+    routine: 'auth_failed'
+  }
+}
+# SERVER_ERROR:  Error: Failed query: select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1
+params: rennannan84@gmail.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1',
+  params: [ 'rennannan84@gmail.com' ],
+  [cause]: error: autentica��o do tipo senha falhou para o usu�rio "postgres"
+      at ignore-listed frames {
+    length: 113,
+    severity: 'FATAL',
+    code: '28P01',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'auth.c',
+    line: '320',
+    routine: 'auth_failed'
+  }
+}
+ POST /api/auth/sign-up/email 500 in 215ms (next.js: 39ms, application-code: 176ms)
+2026-08-21T14:59:16.186Z ERROR [Better Auth]: Error Error: Failed query: select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1
+params: rennannan84@gmail.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1',
+  params: [ 'rennannan84@gmail.com' ],
+  [cause]: error: autentica��o do tipo senha falhou para o usu�rio "postgres"
+      at ignore-listed frames {
+    length: 113,
+    severity: 'FATAL',
+    code: '28P01',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'auth.c',
+    line: '320',
+    routine: 'auth_failed'
+  }
+}
+# SERVER_ERROR:  Error: Failed query: select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1
+params: rennannan84@gmail.com
+    at ignore-listed frames {
+  query: 'select "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt" from "user" where "user"."email" = $1',
+  params: [ 'rennannan84@gmail.com' ],
+  [cause]: error: autentica��o do tipo senha falhou para o usu�rio "postgres"
+      at ignore-listed frames {
+    length: 113,
+    severity: 'FATAL',
+    code: '28P01',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'auth.c',
+    line: '320',
+    routine: 'auth_failed'
+  }
+}
+ POST /api/auth/sign-up/email 500 in 154ms (next.js: 40ms, application-code: 114ms)
+ GET /login 200 in 186ms (next.js: 88ms, application-code: 98ms)
+[?25h
+[ELIFECYCLE] Command failed with exit code 1.
