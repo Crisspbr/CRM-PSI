@@ -8,8 +8,24 @@ __v0_jsx-dev-runtime.ts
 
 # Environment variables
 .env*.local
+# Explicitly ignore backup env files
+.env.local.bak
 
 # Common ignores
 node_modules
 .next/
-.DS_Store.env.local.bak
+.DS_Store
+# Logs
+.run.log
+# Hermes agent config directories (optional)
+.agents/
+.claude/
+.codex/
+# pnpm store
+.pnpm-store/
+# TypeScript build info
+tsconfig.tsbuildinfo
+# Backup files
+*.bak
+*.tmp
+*.temp
