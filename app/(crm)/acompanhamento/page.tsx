@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 import { AddButton, Empty, PageTitle, Status } from "@/components/crm/clinical-ui"
 import { Input } from "@/components/ui/input"
+import { createFollowup, completeFollowup } from "@/app/(crm)/actions"
 
 import {
   DropdownMenu,
@@ -30,7 +31,7 @@ export default function FollowupPage() {
           const data = await res.json()
           setUser(data.user)
           setUpcomingAppointments(data.nextAppointments || [])
-          setItems(data.pendingFollowupsResult || [])
+          setItems(data.pendingFollowups || [])
         }
       } catch (err) {
         console.error("API not available:", err)
