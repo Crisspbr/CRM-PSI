@@ -39,14 +39,14 @@ export default function SignupPage() {
       name: String(f.get("name")),
       email: String(f.get("email")),
       password: String(f.get("password")),
-      // Removed callbackURL to handle redirect manually after success
+      // Removido callbackURL para lidar com redirecionamento manualmente após sucesso
     })
     setLoading(false)
     if (result.error) {
       setError(result.error.message ?? "Não foi possível criar a conta.")
     } else {
       setSuccess("Cadastro realizado com sucesso!")
-      // Redirect to login after 2 seconds
+      // Redirecionar para login após 2 segundos
       setTimeout(() => {
         window.location.href = "/login"
       }, 2000)

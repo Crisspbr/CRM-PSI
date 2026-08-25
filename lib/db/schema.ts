@@ -7,8 +7,8 @@ import {
   integer,
 } from "drizzle-orm/pg-core"
 
-// --- Better Auth required tables -------------------------------------------
-// Column names are camelCase to match Better Auth's defaults. Do not rename.
+// --- Tabelas obrigatórias do Better Auth -------------------------------------------
+// Nomes das colunas em camelCase para corresponder aos padrões do Better Auth. Não renomeie.
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -47,23 +47,23 @@ export const account = pgTable("account", {
   refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt"),
   scope: text("scope"),
   password: text("password"),
-  // Better Auth required fields
+  // Campos obrigatórios do Better Auth
   tokenId: text("tokenId"),
   accessTokenTokenType: text("accessTokenTokenType"),
   refreshTokenTokenType: text("refreshTokenTokenType"),
   idTokenTokenType: text("idTokenTokenType"),
-  // Better Auth v1.1.0+ required fields
+  // Campos obrigatórios do Better Auth v1.1.0+
   federationId: text("federationId"),
   federationUser: text("federationUser"),
-  // Better Auth v1.0.0+ required fields
+  // Campos obrigatórios do Better Auth v1.0.0+
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
-  // Better Auth v0.3.0+ required fields
+  // Campos obrigatórios do Better Auth v0.3.0+
   passwordHash: text("passwordHash"),
-  // Better Auth v0.2.0+ required fields
+  // Campos obrigatórios do Better Auth v0.2.0+
   salt: text("salt"),
-  // Better Auth v0.1.0+ required fields
-  // The error mentioned "issuer" field - adding based on error message
+  // Campos obrigatórios do Better Auth v0.1.0+
+  // O erro mencionava o campo "issuer" - adicionando baseado na mensagem de erro
   issuer: text("issuer"),
 })
 
@@ -76,9 +76,9 @@ export const verification = pgTable("verification", {
   updatedAt: timestamp("updatedAt").defaultNow(),
 })
 
-// --- CRM app tables --------------------------------------------------------
-// Every table carries a plain `userId` column so all queries are scoped per
-// authenticated psychologist. No foreign keys by design.
+// --- Tabelas do app CRM --------------------------------------------------------
+// Cada tabela carrega uma coluna simples `userId` para que todas as consultas sejam
+// escopo por psicólogo autenticado. Sem chaves estrangeiras por design.
 
 // Leads / captação: pessoas interessadas que ainda não são pacientes.
 export const leads = pgTable("leads", {

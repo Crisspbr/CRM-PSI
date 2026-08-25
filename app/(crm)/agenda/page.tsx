@@ -3,15 +3,15 @@
 import { useState, useEffect, useCallback } from "react"
 import { AddButton, Empty, PageTitle } from "@/components/crm/clinical-ui"
 import { Input } from "@/components/ui/input"
-import { Trash2, AlertTriangle, RotateCcw } from "lucide-react"
+import { Trash2, AlertTriangle, RotateCcw, CheckCircle2, XCircle, Bell, CalendarDays } from "lucide-react"
 
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
-import { Bell, CalendarDays } from "lucide-react"
 
 export default function AgendaPage() { 
   const [items, setItems] = useState<any[]>([])
@@ -19,19 +19,19 @@ export default function AgendaPage() {
   const [names, setNames] = useState<Map<number, string>>(new Map())
   const [loading, setLoading] = useState(true)
 
-  // Fetch upcoming appointments for the bell notification (next 60 minutes)
+  // Buscar agendamentos próximos para a notificação do sino (próximos 60 minutos)
   const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([])
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    // Fetch real dashboard data from API
+    // Buscar dados reais do dashboard da API
     const fetchDashboardData = async () => {
       try {
         const res = await fetch("/api/dashboard")
         if (res.ok) {
           const data = await res.json()
-          // Set upcoming appointments from the dashboard data (next 5 appointments)
+          // Definir agendamentos próximos dos dados do dashboard (próximos 5 agendamentos)
           setUpcomingAppointments(data.nextAppointments || [])
         }
       } catch (err) {
@@ -40,7 +40,7 @@ export default function AgendaPage() {
     }
     fetchDashboardData()
 
-    // Automatically clean past sessions when page loads
+    // Limpar sessões passadas automaticamente quando a página carrega
     const cleanPastSessions = async () => {
       try {
         const res = await fetch("/api/agenda/clean-past", {
@@ -58,7 +58,7 @@ export default function AgendaPage() {
     cleanPastSessions()
   }, [])
 
-  // Fetch initial data
+  // Buscar dados iniciais
   useEffect(() => {
     fetch('/api/agenda')
       .then(res => res.json())
@@ -97,6 +97,32 @@ export default function AgendaPage() {
     }
   }, [])
 
+  const handleConcluded = useCallback(async (id: number) => {
+    try {
+      const res = await fetch(`/api/agenda/${id}/concluida`, { method: 'PATCH' })
+      if (res.ok) {
+        setItems(prev => prev.map(item => 
+          item.id === id ? { ...item, status: "concluida" } : item
+        ))
+      }
+    } catch (error) {
+      console.error("Erro ao marcar como realizada:", error)
+    }
+  }, [])
+
+  const handleCancelled = useCallback(async (id: number) => {
+    try {
+      const res = await fetch(`/api/agenda/${id}/cancelada`, { method: 'PATCH' })
+      if (res.ok) {
+        setItems(prev => prev.map(item => 
+          item.id === id ? { ...item, status: "cancelada" } : item
+        ))
+      }
+    } catch (error) {
+      console.error("Erro ao marcar como cancelada:", error)
+    }
+  }, [])
+
   const handleCleanPast = useCallback(async () => {
     if (!window.confirm("Tem certeza que deseja remover todos os agendamentos passados?")) return
     
@@ -124,12 +150,12 @@ export default function AgendaPage() {
       })
       
       if (res.ok) {
-        // Refresh the data
+        // Atualizar os dados
         const data = await fetch('/api/agenda').then(r => r.json())
         setItems(data.items || [])
         setPeople(data.people || [])
         setNames(new Map((data.people || []).map((p: any) => [p.id, p.name])))
-        // Reset form
+        // Resetar formulário
         e.currentTarget.reset()
       }
     } catch (error) {
@@ -203,32 +229,45 @@ export default function AgendaPage() {
                   {a.status === "agendada" ? "Agendada" : a.status === "concluida" ? "Concluída" : a.status === "cancelada" ? "Cancelada" : "Faltou"}
                 </span>
                 {a.status === "agendada" && (
-                  <>
-                    <button 
-                      onClick={() => handleNoShow(a.id)} 
-                      className="hover:text-destructive/70 transition-colors p-1 rounded hover:bg-destructive/5 text-xs"
-                      title="Marcar como não veio"
-                    >
-                      <AlertTriangle className="h-4 w-4" />
-                    </button>
-                    <button 
-                      onClick={() => handleDelete(a.id)} 
-                      className="hover:text-destructive/70 transition-colors p-1 rounded hover:bg-destructive/5 text-xs ml-2"
-                      title="Excluir agendamento"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="hover:bg-muted/50 transition-colors p-1 rounded text-xs" title="Alterar status">
+                        <AlertTriangle className="h-4 w-4" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem 
+                        onClick={() => handleConcluded(a.id)}
+                        className="flex items-center gap-2"
+                      >
+                        <CheckCircle2 className="h-4 w-4 text-success" />
+                        Marcar como realizada
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => handleCancelled(a.id)}
+                        className="flex items-center gap-2"
+                      >
+                        <XCircle className="h-4 w-4 text-destructive" />
+                        Marcar como cancelada
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem 
+                        onClick={() => handleNoShow(a.id)}
+                        className="flex items-center gap-2 text-destructive"
+                      >
+                        <AlertTriangle className="h-4 w-4" />
+                        Marcar como não veio
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
-                {a.status !== "agendada" && (
-                  <button 
-                    onClick={() => handleDelete(a.id)} 
-                    className="hover:text-destructive/70 transition-colors p-1 rounded hover:bg-destructive/5 text-xs"
-                    title="Excluir agendamento"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                )}
+                <button 
+                  onClick={() => handleDelete(a.id)} 
+                  className="hover:text-destructive/70 transition-colors p-1 rounded hover:bg-destructive/5 text-xs ml-2"
+                  title="Excluir agendamento"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
               </div>
             </article>
           ))}

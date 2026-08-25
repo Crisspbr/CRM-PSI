@@ -61,12 +61,12 @@ export function AddButton({ children, formId }: { children:ReactNode; formId?:st
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   
-  // When no formId, it's a submit button - no onClick needed
+  // Quando não há formId, é um botão de submit - não precisa de onClick
   if (!formId) {
     return <Button type="submit"><Plus data-icon="inline-start" />{children}</Button>
   }
   
-  // When formId is provided, it's a client-side reset button
+  // Quando formId é fornecido, é um botão de reset do lado do cliente
   return <Button 
     type={mounted ? "button" : "submit"} 
     onClick={mounted ? () => { const form = document.getElementById(formId); if (form) form.reset(); } : undefined}

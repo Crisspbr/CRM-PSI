@@ -10,7 +10,7 @@ import {
   Mail,
   Settings,
   LifeBuoy,
-  Cloud,
+  Brain,
   HeartPulse,
   ClipboardList,
 } from "lucide-react"
@@ -51,12 +51,12 @@ export function AppSidebar() {
       <SidebarHeader>
         <div className="flex items-center gap-2.5 px-2 py-1.5">
           <div className="flex size-9 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            <Cloud className="size-5" />
+            <Brain className="size-5" />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-sm font-semibold">Nimbus CRM</span>
+            <span className="text-sm font-semibold">Psi Manager</span>
             <span className="text-xs text-sidebar-foreground/60">
-              Equipe de Vendas
+              Gestão de pacientes
             </span>
           </div>
         </div>

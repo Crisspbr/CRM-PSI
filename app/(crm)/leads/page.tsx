@@ -22,19 +22,19 @@ export default function LeadsPage() {
   const [items, setItems] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Fetch upcoming appointments for the bell notification (next 60 minutes)
+  // Buscar agendamentos próximos para a notificação do sino (próximos 60 minutos)
   const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([])
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    // Fetch real dashboard data from API
+    // Buscar dados reais do dashboard da API
     const fetchDashboardData = async () => {
       try {
         const res = await fetch("/api/dashboard")
         if (res.ok) {
           const data = await res.json()
-          // Set upcoming appointments from the dashboard data (next 5 appointments)
+          // Definir agendamentos próximos dos dados do dashboard (próximos 5 agendamentos)
           setUpcomingAppointments(data.nextAppointments || [])
         }
       } catch (err) {
@@ -43,7 +43,7 @@ export default function LeadsPage() {
     }
     fetchDashboardData()
 
-    // Automatically clean past sessions when page loads
+    // Limpar sessões passadas automaticamente quando a página carrega
     const cleanPastSessions = async () => {
       try {
         const res = await fetch("/api/agenda/clean-past", {

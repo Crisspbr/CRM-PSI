@@ -28,7 +28,7 @@ export default function LoginPage() {
       setError(result.error.message ?? "Não foi possível entrar.")
     } else {
       setSuccess("Login realizado com sucesso!")
-      // Redirect to dashboard after 1.5 seconds
+      // Redirecionar para o dashboard após 1.5 segundos
       setTimeout(() => {
         window.location.href = "/"
       }, 1500)

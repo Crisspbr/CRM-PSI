@@ -165,7 +165,7 @@ export async function getUpcomingAppointments(input: FormData | { patientId: num
   const { and, eq, gte, lte, asc } = await import("drizzle-orm")
   const { appointments, patients } = await import("@/lib/db/schema")
   
-  // Handle both FormData and plain object
+  // Lidar com FormData e objeto simples
   let patientId: number
   if (input instanceof FormData) {
     patientId = Number(input.get("patientId"))

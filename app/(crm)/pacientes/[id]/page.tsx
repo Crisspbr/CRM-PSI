@@ -34,7 +34,7 @@ export default function PatientRecord({ params }: { params: Promise<{ id: string
   const [observations, setObservations] = useState("")
   const [progress, setProgress] = useState("")
 
-  // Fetch patient and records when page changes
+  // Buscar paciente e registros quando a página muda
   useEffect(() => {
     const fetchData = async () => {
       setPatientData(prev => ({ ...prev, loading: true }))
@@ -61,7 +61,7 @@ export default function PatientRecord({ params }: { params: Promise<{ id: string
     fetchData()
   }, [id, page])
 
-  // Fetch upcoming appointments for notifications
+  // Buscar agendamentos próximos para notificações
   useEffect(() => {
     if (!patientData.patient?.id) return
     
@@ -79,13 +79,13 @@ export default function PatientRecord({ params }: { params: Promise<{ id: string
     fetchAppointments()
   }, [patientData.patient?.id, showNotifications])
 
-  // Handle form submission for new record
+  // Tratar envio do formulário para novo registro
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!patientData.patient?.id) return
 
     try {
-      // Combine structured fields into content for storage
+      // Combinar campos estruturados no conteúdo para armazenamento
       const content = `
 Queixa principal: ${chiefComplaint}
 Intervenções realizadas: ${interventions}
@@ -100,14 +100,14 @@ Avaliação do progresso: ${progress || "Não informado"}
       
       await addRecord(formData)
       
-      // Reset form
+      // Resetar formulário
       setChiefComplaint("")
       setInterventions("")
       setObservations("")
       setProgress("")
       setShowForm(false)
       
-      // Refetch records (reset to first page to show the new record)
+      // Rebuscar registros (resetar para primeira página para mostrar o novo registro)
       setPage(0)
     } catch (error) {
       console.error("Failed to add record:", error)
@@ -116,7 +116,7 @@ Avaliação do progresso: ${progress || "Não informado"}
 
   const { patient, records: recordsData, totalRecords, totalPages, loading } = patientData
 
-  // Handle delete record
+  // Tratar exclusão de registro
   const handleDeleteRecord = async (recordId: number) => {
     if (!window.confirm("Tem certeza que deseja excluir esta evolução?")) return
     
@@ -126,7 +126,7 @@ Avaliação do progresso: ${progress || "Não informado"}
       formData.append("patientId", String(patient.id))
       await deleteRecord(formData)
       
-      // Refetch records
+      // Rebuscar registros
       setPage(0)
     } catch (error) {
       console.error("Failed to delete record:", error)
@@ -152,7 +152,7 @@ Avaliação do progresso: ${progress || "Não informado"}
     )
   }
 
-  // Compute status badge and text
+  // Calcular badge de status e texto
   const statusText = patient.status === "ativo" ? "Ativo" : patient.status === "pausado" ? "Pausado" : patient.status === "alta" ? "Alta" : "Inativo"
   const statusClass = patient.status === "ativo" ? "bg-primary/10 text-primary" : patient.status === "pausado" ? "bg-warning/10 text-warning" : patient.status === "alta" ? "bg-success/10 text-success" : "bg-muted/20 text-muted-foreground"
 

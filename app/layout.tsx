@@ -3,9 +3,9 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Clínica CRM',
+  title: 'Psi Manager',
   description:
-    'CRM clínico para organizar pacientes, prontuários, agenda e acompanhamento.',
+    'Gestão de pacientes para clínicas e consultórios.',
 }
 
 export const viewport: Viewport = {

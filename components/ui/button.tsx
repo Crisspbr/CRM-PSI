@@ -50,10 +50,10 @@ function Button({
   onClick,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants> & { render?: React.ReactNode; nativeButton?: boolean }) {
-  // If render prop is provided, we need to handle it properly
+  // Se a prop render for fornecida, precisamos tratá-la corretamente
   if (render) {
     const isLink = React.isValidElement(render) && render.type === 'a';
-    // Don't pass onClick when rendering as a link - links don't support onClick the same way
+    // Não passar onClick quando renderizado como link - links não suportam onClick da mesma forma
     const { onClick: _, ...propsWithoutOnClick } = props;
     return (
       <ButtonPrimitive

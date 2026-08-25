@@ -21,7 +21,7 @@ export default function FollowupPage() {
   const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([])
   const [mounted, setMounted] = useState(false)
 
-  // Fetch user data, upcoming appointments for bell, and followups from dashboard API
+  // Buscar dados do usuário, agendamentos próximos para o sino, e followups da API do dashboard
   useEffect(() => {
     setMounted(true)
     const fetchDashboardData = async () => {
@@ -41,7 +41,7 @@ export default function FollowupPage() {
     }
     fetchDashboardData()
 
-    // Automatically clean past sessions when page loads
+    // Automaticamente limpa as sessões
     const cleanPastSessions = async () => {
       try {
         const res = await fetch("/api/agenda/clean-past", {
@@ -95,7 +95,7 @@ export default function FollowupPage() {
                 <p className="text-sm text-muted-foreground">{f.note || "Sem observação"}</p>
               </div>
               <p className="text-sm capitalize">{f.channel}</p>
-              <p className="text-sm text-muted-foreground">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(f.dueDate)}</p>
+              <p className="text-sm text-muted-foreground\">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(f.dueDate))}</p>
               <Status value={f.status} />
               {f.status === "pendente" && (
                 <form action={completeFollowup}>

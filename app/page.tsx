@@ -76,7 +76,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     setMounted(true)
-    // Fetch real dashboard data from API
+    // Buscar dados reais do dashboard da API
     const fetchDashboardData = async () => {
       try {
         const res = await fetch("/api/dashboard")
@@ -86,13 +86,13 @@ export default function DashboardPage() {
             setUser(data.user)
             setKpis(data.kpis)
             setPatientStatus(data.patientStatus)
-            // Set actual data from API response (no more mock data)
+            // Definir dados reais da resposta da API (sem mais dados mock)
             setPipelineData(data.pipelineData || [])
             setRevenueData(data.revenueData || [])
             setChannelData(data.channelData || [])
             setWeeklyAppointments(data.weeklyAppointments || [])
             setRecentPatients(data.recentPatients || [])
-            // Set upcoming appointments from the dashboard data (next 5 appointments)
+            // Definir agendamentos próximos dos dados do dashboard (próximos 5 agendamentos)
             setUpcomingAppointments(data.nextAppointments || [])
             setError(null)
           }
@@ -106,7 +106,7 @@ export default function DashboardPage() {
     }
     fetchDashboardData()
     
-    // Automatically clean past sessions when dashboard loads
+    // Limpar sessões passadas automaticamente quando o dashboard carrega
     const cleanPastSessions = async () => {
       try {
         const res = await fetch("/api/agenda/clean-past", {
@@ -116,8 +116,8 @@ export default function DashboardPage() {
         if (!res.ok) {
           console.error("Erro ao limpar sessões passadas")
         } else {
-          // Optionally reload or update state if needed
-          // window.location.reload() // Uncomment if full reload is desired
+          // Opcionalmente recarregar ou atualizar estado se necessário
+          // window.location.reload() // Descomente se recarregamento completo for desejado
         }
       } catch (error) {
         console.error("Erro ao limpar sessões passadas:", error)
@@ -127,7 +127,7 @@ export default function DashboardPage() {
     cleanPastSessions()
   }, [])
 
-  // Show loading state or error
+  // Mostrar estado de carregamento ou erro
   if (!mounted) {
     return (
       <main className="flex flex-1 flex-col gap-6 p-4 md:p-6">
@@ -593,9 +593,7 @@ export default function DashboardPage() {
                   <CardTitle className="text-lg">Pacientes Recentes</CardTitle>
                   <CardDescription>Últimos atendimentos e próximos agendados</CardDescription>
                 </div>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href="/pacientes">Ver todos</Link>
-                </Button>
+                <Button variant="ghost" size="sm" render={<Link href="/pacientes">Ver todos</Link>} />
               </div>
             </CardHeader>
             <CardContent className="flex-1 p-0">
@@ -707,7 +705,7 @@ export default function DashboardPage() {
   )
 }
 
-// Chart configurations
+// Configurações dos gráficos
 const chartConfigRevenue = {
   receita: { label: "Receita (R$ mil)", color: "hsl(40, 85%, 55%)" },
   meta: { label: "Meta (R$ mil)", color: "hsl(160, 60%, 45%)" },

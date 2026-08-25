@@ -16,7 +16,7 @@ export async function getUpcomingAppointmentsForUser() {
     const now = new Date()
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000)
     
-    // Get upcoming appointments within 1 hour
+    // Obter agendamentos próximos dentro de 1 hora
     const upcomingAppointments = await db.select({
       id: appointments.id,
       title: appointments.title,
@@ -36,7 +36,7 @@ export async function getUpcomingAppointmentsForUser() {
     )
     .orderBy(appointments.startsAt)
     
-    // Get upcoming followups due within 1 hour
+    // Obter follow-ups com vencimento dentro de 1 hora
     const upcomingFollowups = await db.select({
       id: followups.id,
       contactName: followups.contactName,
